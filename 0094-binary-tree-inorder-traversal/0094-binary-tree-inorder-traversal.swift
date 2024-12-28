@@ -19,17 +19,11 @@ class Solution {
 
         var output: [Int] = []
         func dfs(_ root: TreeNode) {
-            guard root.left != nil || root.right != nil 
-            else { 
-                output.append(root.val)
-                return 
-            }
-
             if let left = root.left {
                 dfs(left)
             }
             output.append(root.val)
-            
+
             if let right = root.right {
                 dfs(right)
             }
