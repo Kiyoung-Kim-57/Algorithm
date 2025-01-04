@@ -1,22 +1,26 @@
 class Solution {
     func deleteAndEarn(_ nums: [Int]) -> Int {
-        let sorted = Array(Set(nums)).sorted()
-        let maxNum = sorted.max()!
-        let minNum = sorted.min()!
-        var dp: [Int] = [Int](repeating: 0, count: maxNum + 1)
-
-        for num in 1...maxNum {
-            guard nums.contains(num) else { 
-                dp[num] = dp[num - 1] 
-                continue 
-            }
-            guard num != 1 else { 
-                dp[num] = nums.filter { $0 == 1 }.count
-                continue
-            }
-            dp[num] = max(dp[num - 1], (dp[num - 2] + num * nums.filter{ $0 == num }.count))
+        guard !nums.isEmpty else { return 0 }
+        
+        // 1. 숫자의 최대값 계산
+        let maxNum = nums.max()!
+        
+        // 2. 빈도 배열 생성
+        var count = [Int](repeating: 0, count: maxNum + 1)
+        for num in nums {
+            count[num] += num // count[num]에 num의 점수를 누적
         }
         
-        return dp.removeLast()
+        // 3. DP 배열 계산
+        var dp = [Int](repeating: 0, count: maxNum + 1)
+        dp[1] = count[1]
+        
+        guard maxNum > 1 else { return dp[maxNum]}
+        
+        for num in 2...maxNum {
+            dp[num] = max(dp[num - 1], dp[num - 2] + count[num])
+        }
+        
+        return dp[maxNum]
     }
 }
