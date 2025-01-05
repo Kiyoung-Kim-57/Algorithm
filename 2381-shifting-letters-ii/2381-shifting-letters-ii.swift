@@ -26,14 +26,17 @@ class Solution {
     }
 
     private func calMoves(shifts: [[Int]], count: Int) -> [Int] {
-        var moves: [Int] = [Int](repeating: 0, count: count)
+        var moves: [Int] = [Int](repeating: 0, count: count + 1)
         for shift in shifts {
             let start = shift[0]
-            let end = shift[1]
+            let end = shift[1] + 1
 
-            for i in start...end {
-                moves[i] += (shift[2] == 1) ? 1 : -1
-            }
+            moves[start] += (shift[2] == 1) ? 1 : -1
+            moves[end] -= (shift[2] == 1) ? 1 : -1
+        }
+
+        for i in 1..<moves.count {
+            moves[i] += moves[i - 1]
         }
 
         return moves
