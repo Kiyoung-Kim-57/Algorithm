@@ -1,37 +1,35 @@
-import Foundation
+let count = Int(readLine()!)!
+let nums = readLine()!.split(separator: " ").map { Int(String($0))! }
+var operators = readLine()!.split(separator: " ").map { Int(String($0))! }
 
-let n = Int(readLine()!)!
-let numbers = readLine()!.split(separator: " ").map { Int($0)! }
-var operators = readLine()!.split(separator: " ").map { Int($0)! } // +, -, *, /
+var maxNum: Int = .min
+var minNum: Int = .max
 
-var maxResult = Int.min
-var minResult = Int.max
-
-func dfs(_ depth: Int, _ result: Int) {
-    if depth == n { 
-        maxResult = max(maxResult, result)
-        minResult = min(minResult, result)
+func dfs(_ index: Int, result: Int) {
+    if index == count {
+        maxNum = max(maxNum, result)
+        minNum = min(minNum, result)
         return
     }
     
-    for i in 0..<4 {
+    for i in 0..<operators.count {
+        var tempResult = result
+        
         if operators[i] > 0 {
             operators[i] -= 1
-            let nextResult: Int
             switch i {
-            case 0: nextResult = result + numbers[depth]
-            case 1: nextResult = result - numbers[depth]
-            case 2: nextResult = result * numbers[depth]
-            case 3: nextResult = result / numbers[depth]
-            default: continue
+            case 0: tempResult += nums[index]
+            case 1: tempResult -= nums[index]
+            case 2: tempResult *= nums[index]
+            case 3: tempResult /= nums[index]
+            default: break
             }
-            dfs(depth + 1, nextResult)
-            operators[i] += 1 
+            dfs(index + 1, result: tempResult)
+            operators[i] += 1
         }
     }
 }
 
-dfs(1, numbers[0])
+dfs(1, result: nums[0])
 
-print(maxResult)
-print(minResult)
+print("\(maxNum)\n\(minNum)")
