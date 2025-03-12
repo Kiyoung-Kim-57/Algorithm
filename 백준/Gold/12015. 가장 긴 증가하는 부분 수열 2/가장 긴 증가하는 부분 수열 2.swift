@@ -22,11 +22,6 @@ func lisSearch(nums: [Int]) -> Int {
     var lis: [Int] = []
     
     for num in nums {
-        guard !lis.isEmpty else {
-            lis.append(num)
-            continue
-        }
-
         let pos = binarySearch(lis, num)
         
         if pos == lis.count {
