@@ -7,34 +7,31 @@ for i in 0..<input {
 }
 //CPZY
 //주어진 보드 내에서 최대로 먹을 수 있는 사탕 개수 구하는 함수
-func checkColor(_ str: String, _ line: [String]) -> Int {
-    var result = 0
-    var temp = 0
-    for color in line {
-        if color == str {
-            temp += 1
+func checkCandies(_ line: [String]) -> Int {
+    var maxLen = 1
+    var currentLen = 1
+    
+    for i in 1..<line.count {
+        if line[i] == line[i-1] {
+            currentLen += 1
+        } else {
+            maxLen = max(maxLen, currentLen)
+            currentLen = 1
         }
-        else {
-            temp = 0
-        }
-        
-        result = max(result, temp)
     }
     
-    return result
+    return max(maxLen, currentLen)
 }
 //행 탐색으로 최대 사탕 개수 구하기
 func checkH(_ board:[[String]]) -> Int {
     var result: Int = 0
-    let colors: [String] = ["C", "P", "Z", "Y"]
     
     for n in 0..<input {
         let line = board[n]
         
-        for color in colors {
-            let maxCandy = checkColor(color, line)
-            result = max(result, maxCandy)
-        }
+        let maxCandy = checkCandies(line)
+        result = max(result, maxCandy)
+        
     }
     
     return result
@@ -42,26 +39,17 @@ func checkH(_ board:[[String]]) -> Int {
 //열 탐색으로 최대 사탕 개수 구하기
 func checkV(_ board: [[String]]) -> Int {
     var result: Int = 0
-    let colors: [String] = ["C", "P", "Z", "Y"]
     
-    for color in colors {
-        var count: Int = 0
-        
-        for n in 0..<input {
-            var temp: Int = 0
-            for m in 0..<input {
-                 if board[m][n] == color {
-                     temp += 1
-                 } else {
-                     temp = 0
-                 }
-                count = max(count, temp)
-            }
+    for n in 0..<input {
+        var column: [String] = []
+        for m in 0..<input {
+            column.append(board[m][n])
         }
         
-        result = max(result, count)
+        
+        result = max(result, checkCandies(column))
     }
-    
+
     return result
 }
 
