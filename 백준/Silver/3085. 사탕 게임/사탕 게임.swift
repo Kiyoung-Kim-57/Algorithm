@@ -69,7 +69,7 @@ func checkAfterSwitch(x: Int, y: Int) -> Int {
         let toY = y + dy[i]
         
         guard toX < input && toY < input else { continue }
-        
+        guard candyBoard[y][x] != candyBoard[toY][toX] else { continue }
         var newBoard = candyBoard
         let temp = newBoard[toY][toX]
         
