@@ -5,6 +5,7 @@ var board: [[Int]] = []
 var result: Int = 0
 // 봉우리 체크가 끝나면 봉우리 무리들을 방문했다고 기록
 var visitedPole = [[Bool]](repeating: [Bool](repeating: false, count: size[1]), count: size[0])
+var notPole = [[Bool]](repeating: [Bool](repeating: false, count: size[1]), count: size[0])
 
 for i in 0..<size[0] {
     let line = readLine()!.split(separator: " ").map { Int($0)! }
@@ -38,12 +39,15 @@ func bfs(_ start: (Int, Int)) {
             
             if board[newPoint.1][newPoint.0] > board[start.1][start.0] {
                 // 인접 위치에 해당 격자보다 높은 곳이 있다면 봉우리가 아니므로 리턴
+                notPole[start.1][start.0] = true
                 return
             }
             
             if board[newPoint.1][newPoint.0] == board[start.1][start.0] {
                 queue.append(newPoint)
                 pole.append(newPoint)
+            } else {
+                notPole[newPoint.1][newPoint.0] = true
             }
             
             visited[newPoint.1][newPoint.0] = true
@@ -58,7 +62,7 @@ func bfs(_ start: (Int, Int)) {
 
 for y in 0..<height {
     for x in 0..<width {
-        if !visitedPole[y][x] {
+        if !visitedPole[y][x] && !notPole[y][x] {
             bfs((x, y))
         }
     }
